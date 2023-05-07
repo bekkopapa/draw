@@ -108,41 +108,42 @@ imgSelect.forEach((img) => img.addEventListener("click", onImgClick));
 
 // 모바일
 
-// 터치 시작
+function getCanvasPos(event) {
+    const canvasRect = canvas.getBoundingClientRect();
+    const scaleX = canvas.width / canvasRect.width;
+    const scaleY = canvas.height / canvasRect.height;
+
+    return {
+        x: (event.clientX - canvasRect.left) * scaleX,
+        y: (event.clientY - canvasRect.top) * scaleY
+    };
+}
+
 canvas.addEventListener("touchstart", (event) => {
     event.preventDefault(); // 기본 스크롤 동작 방지
     isPainting = true;
     const touch = event.touches[0];
-    const canvasRect = canvas.getBoundingClientRect();
-    const x = touch.clientX - canvasRect.left;
-    const y = touch.clientY - canvasRect.top;
-    ctx.moveTo(x, y);
+    const pos = getCanvasPos(touch);
+    ctx.moveTo(pos.x, pos.y);
 });
 
-// 터치 이동
 canvas.addEventListener("touchmove", (event) => {
     event.preventDefault(); // 기본 스크롤 동작 방지
     if (!isPainting) return;
     const touch = event.touches[0];
-    const canvasRect = canvas.getBoundingClientRect();
-    const x = touch.clientX - canvasRect.left;
-    const y = touch.clientY - canvasRect.top;
-    ctx.lineTo(x, y);
+    const pos = getCanvasPos(touch);
+    ctx.lineTo(pos.x, pos.y);
     ctx.stroke();
 });
 
-// 터치 종료
 document.addEventListener("touchend", () => {
     isPainting = false;
     ctx.beginPath();
 });
 
-// 터치 채우기
 canvas.addEventListener("touchend", (event) => {
     if (!isFilling) return;
     const touch = event.changedTouches[0];
-    const canvasRect = canvas.getBoundingClientRect();
-    const x = touch.clientX - canvasRect.left;
-    const y = touch.clientY - canvasRect.top;
-    ctx.fillRect(x, y, CANVAS_WIDTH, CANVAS_HEIGHT);
+    const pos = getCanvasPos(touch);
+    ctx.fillRect(pos.x, pos.y, CANVAS_WIDTH, CANVAS_HEIGHT);
 });
