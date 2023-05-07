@@ -107,21 +107,35 @@ saveButton.addEventListener("click", onSaveClick);
 imgSelect.forEach((img) => img.addEventListener("click", onImgClick));
 
 // 모바일
-canvas.addEventListener("touchstart", ({ touches }) => {
+function getCanvasPos(event) {
+    const canvasRect = canvas.getBoundingClientRect();
+    const scaleX = canvas.width / canvasRect.width;
+    const scaleY = canvas.height / canvasRect.height;
+
+    return {
+        x: (event.clientX - canvasRect.left) * scaleX,
+        y: (event.clientY - canvasRect.top) * scaleY
+    };
+}
+
+canvas.addEventListener("touchstart", (event) => {
+    event.preventDefault(); // 기본 스크롤 동작 방지
     isPainting = true;
-    const { clientX, clientY } = touches[0];
-    ctx.moveTo(clientX, clientY);
-  });
-  
-  canvas.addEventListener("touchmove", ({ touches }) => {
+    const touch = event.touches[0];
+    const pos = getCanvasPos(touch);
+    ctx.moveTo(pos.x, pos.y);
+});
+
+canvas.addEventListener("touchmove", (event) => {
+    event.preventDefault(); // 기본 스크롤 동작 방지
     if (!isPainting) return;
-    const { clientX, clientY } = touches[0];
-    ctx.lineTo(clientX, clientY);
+    const touch = event.touches[0];
+    const pos = getCanvasPos(touch);
+    ctx.lineTo(pos.x, pos.y);
     ctx.stroke();
-  });
-  
-  canvas.addEventListener("touchend", () => {
+});
+
+document.addEventListener("touchend", () => {
     isPainting = false;
     ctx.beginPath();
-  });
-  
+});
