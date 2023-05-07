@@ -107,30 +107,24 @@ saveButton.addEventListener("click", onSaveClick);
 imgSelect.forEach((img) => img.addEventListener("click", onImgClick));
 
 // 모바일
-function getCanvasPos(event) {
-    const canvasRect = canvas.getBoundingClientRect();
-    const scaleX = canvas.width / canvasRect.width;
-    const scaleY = canvas.height / canvasRect.height;
-
+function getTouchPos(e) {
     return {
-        x: (event.clientX - canvasRect.left) * scaleX,
-        y: (event.clientY - canvasRect.top) * scaleY
-    };
+        x: e.touches[0].clientX - e.target.offsetLeft,
+        y: e.touches[0].clientY - e.target.offsetTop + document.documentElement.scrollTop
+    }
 }
 
-canvas.addEventListener("touchstart", (event) => {
-    event.preventDefault(); // 기본 스크롤 동작 방지
+canvas.addEventListener("touchstart", (e) => {
+    e.preventDefault();
     isPainting = true;
-    const touch = event.touches[0];
-    const pos = getCanvasPos(touch);
+    const pos = getTouchPos(e);
     ctx.moveTo(pos.x, pos.y);
 });
 
-canvas.addEventListener("touchmove", (event) => {
-    event.preventDefault(); // 기본 스크롤 동작 방지
+canvas.addEventListener("touchmove", (e) => {
+    e.preventDefault();
     if (!isPainting) return;
-    const touch = event.touches[0];
-    const pos = getCanvasPos(touch);
+    const pos = getTouchPos(e);
     ctx.lineTo(pos.x, pos.y);
     ctx.stroke();
 });
