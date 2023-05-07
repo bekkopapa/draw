@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meme Maker</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="photo-options">
+        <img src="imgs/00.png">
+        <img src="imgs/01.png">
+        <img src="imgs/02.png">
+        <img src="imgs/03.png">
+        <img src="imgs/04.png">
+        <img src="imgs/05.png">
+    </div>
+    <div class="color-options">
+        <input id="color" type="color" />
+        <div class="color-option" style="background-color: #1abc9c;" data-color="#1abc9c"></div>
+        <div class="color-option" style="background-color: #2ecc71;" data-color="#2ecc71"></div>
+        <div class="color-option" style="background-color: #3498db;" data-color="#3498db"></div>
+        <div class="color-option" style="background-color: #34495e;" data-color="#34495e"></div>
+        <div class="color-option" style="background-color: #f1c40f;" data-color="#f1c40f"></div>
+        <div class="color-option" style="background-color: #e74c3c;" data-color="#e74c3c"></div>
+        <div class="color-option" style="background-color: #95a5a6;" data-color="#95a5a6"></div>
+        <div class="color-option" style="background-color: #f39c12;" data-color="#f39c12"></div>
+        <div class="color-option" style="background-color: #c0392b;" data-color="#c0392b"></div>
+        <div class="color-option" style="background-color: #7f8c8d;" data-color="#7f8c8d"></div>
+    </div>
+    <canvas></canvas>
+    <div class="btns">
+        <h1>소배토의 낙서장</h1>
+        <input id="line-width" type="range" min="1" max="10" value="5" step="0.5" />
+        <button id="mode-btn">채우기</button>
+        <button id="Reset">처음부터</button>
+        <button id="eraser">지우개</button>
+        <button id="save">저장하기</button>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>
