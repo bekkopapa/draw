@@ -12,8 +12,8 @@ const textInput = document.getElementById("text");
 const saveButton = document.getElementById("save");
 const imgSelect = document.querySelectorAll("img");
 
-const CANVAS_WIDTH = 800;
-const CANVAS_HEIGHT = 800;
+const CANVAS_WIDTH = 600;
+const CANVAS_HEIGHT = 600;
 
 
 canvas.width = CANVAS_WIDTH;
@@ -94,7 +94,7 @@ function onImgClick(event) {
     const image = new Image();
     image.src = url;
     image.onload = function () {
-        ctx.drawImage(image, 0, 0);
+        ctx.drawImage(image, 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
     };
 }
 
