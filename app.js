@@ -107,43 +107,21 @@ saveButton.addEventListener("click", onSaveClick);
 imgSelect.forEach((img) => img.addEventListener("click", onImgClick));
 
 // 모바일
-
-function getTouchPos(e) {
-    return {
-        x: e.touches[0].clientX - e.target.offsetLeft,
-        y: e.touches[0].clientY - e.target.offsetTop + document.documentElement.scrollTop
-    }
-}
-
-
-function touchStart(e) {
-    e.preventDefault();
+canvas.addEventListener("touchstart", ({ touches }) => {
     isPainting = true;
-    const { x, y } = getTouchPos(e);
-    startX = x;
-    startY = y;
-}
-
-
-function touchMove(e) {
-    if(!isPainting) return;
-    const { x, y } = getTouchPos(e);
-    draw(x, y);
-    startX = x;
-    startY = y;
-}
-
-
-function touchEnd(e) {
-    if(!isPainting) return;
-    ctx.beginPath();
-    ctx.arc(startX, startY, ctx.lineWidth/2, 0, 2*Math.PI);
-    ctx.fillStyle = ctx.strokeStyle;
-    ctx.fill();
+    const { clientX, clientY } = touches[0];
+    ctx.moveTo(clientX, clientY);
+  });
+  
+  canvas.addEventListener("touchmove", ({ touches }) => {
+    if (!isPainting) return;
+    const { clientX, clientY } = touches[0];
+    ctx.lineTo(clientX, clientY);
+    ctx.stroke();
+  });
+  
+  canvas.addEventListener("touchend", () => {
     isPainting = false;
-}
-
-canvas.addEventListener("touchmove", touchMove, false);
-canvas.addEventListener("touchstart", touchStart, false);
-canvas.addEventListener("touchend", touchEnd, false);
-
+    ctx.beginPath();
+  });
+  
