@@ -108,42 +108,42 @@ imgSelect.forEach((img) => img.addEventListener("click", onImgClick));
 
 // 모바일
 
-function getCanvasPos(event) {
-    const canvasRect = canvas.getBoundingClientRect();
-    const scaleX = canvas.width / canvasRect.width;
-    const scaleY = canvas.height / canvasRect.height;
-
+function getTouchPos(e) {
     return {
-        x: (event.clientX - canvasRect.left) * scaleX,
-        y: (event.clientY - canvasRect.top) * scaleY
-    };
+        x: e.touches[0].clientX - e.target.offsetLeft,
+        y: e.touches[0].clientY - e.target.offsetTop + document.documentElement.scrollTop
+    }
 }
 
-canvas.addEventListener("touchstart", (event) => {
-    event.preventDefault(); // 기본 스크롤 동작 방지
+
+function touchStart(e) {
+    e.preventDefault();
     isPainting = true;
-    const touch = event.touches[0];
-    const pos = getCanvasPos(touch);
-    ctx.moveTo(pos.x, pos.y);
-});
+    const { x, y } = getTouchPos(e);
+    startX = x;
+    startY = y;
+}
 
-canvas.addEventListener("touchmove", (event) => {
-    event.preventDefault(); // 기본 스크롤 동작 방지
-    if (!isPainting) return;
-    const touch = event.touches[0];
-    const pos = getCanvasPos(touch);
-    ctx.lineTo(pos.x, pos.y);
-    ctx.stroke();
-});
 
-document.addEventListener("touchend", () => {
-    isPainting = false;
+function touchMove(e) {
+    if(!isPainting) return;
+    const { x, y } = getTouchPos(e);
+    draw(x, y);
+    startX = x;
+    startY = y;
+}
+
+
+function touchEnd(e) {
+    if(!isPainting) return;
     ctx.beginPath();
-});
+    ctx.arc(startX, startY, ctx.lineWidth/2, 0, 2*Math.PI);
+    ctx.fillStyle = ctx.strokeStyle;
+    ctx.fill();
+    isPainting = false;
+}
 
-canvas.addEventListener("touchend", (event) => {
-    if (!isFilling) return;
-    const touch = event.changedTouches[0];
-    const pos = getCanvasPos(touch);
-    ctx.fillRect(pos.x, pos.y, CANVAS_WIDTH, CANVAS_HEIGHT);
-});
+canvas.addEventListener("touchmove", touchMove, false);
+canvas.addEventListener("touchstart", touchStart, false);
+canvas.addEventListener("touchend", touchEnd, false);
+
