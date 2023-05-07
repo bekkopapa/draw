@@ -70,6 +70,9 @@ function onCanvasClick() {
     }
 }
 
+
+
+
 function onResetClick() {
     ctx.fillStyle = "white";
     ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);  
@@ -99,8 +102,16 @@ function onImgClick(event) {
 }
 
 
+function onCanvasTouchStart(e) {
+    if (isFilling) {
+        e.preventDefault();
+        ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+    }
+}
+
 modeBtn.addEventListener("click", onModeClick);
 canvas.addEventListener("click", onCanvasClick);
+canvas.addEventListener("touchstart", onCanvasTouchStart);
 resetBtn.addEventListener("click", onResetClick);
 eraser.addEventListener("click", onEraserClick);
 saveButton.addEventListener("click", onSaveClick);
