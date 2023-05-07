@@ -113,7 +113,10 @@ canvas.addEventListener("touchstart", (event) => {
     event.preventDefault(); // 기본 스크롤 동작 방지
     isPainting = true;
     const touch = event.touches[0];
-    ctx.moveTo(touch.clientX, touch.clientY);
+    const canvasRect = canvas.getBoundingClientRect();
+    const x = touch.clientX - canvasRect.left;
+    const y = touch.clientY - canvasRect.top;
+    ctx.moveTo(x, y);
 });
 
 // 터치 이동
@@ -121,7 +124,10 @@ canvas.addEventListener("touchmove", (event) => {
     event.preventDefault(); // 기본 스크롤 동작 방지
     if (!isPainting) return;
     const touch = event.touches[0];
-    ctx.lineTo(touch.clientX, touch.clientY);
+    const canvasRect = canvas.getBoundingClientRect();
+    const x = touch.clientX - canvasRect.left;
+    const y = touch.clientY - canvasRect.top;
+    ctx.lineTo(x, y);
     ctx.stroke();
 });
 
@@ -131,3 +137,12 @@ document.addEventListener("touchend", () => {
     ctx.beginPath();
 });
 
+// 터치 채우기
+canvas.addEventListener("touchend", (event) => {
+    if (!isFilling) return;
+    const touch = event.changedTouches[0];
+    const canvasRect = canvas.getBoundingClientRect();
+    const x = touch.clientX - canvasRect.left;
+    const y = touch.clientY - canvasRect.top;
+    ctx.fillRect(x, y, CANVAS_WIDTH, CANVAS_HEIGHT);
+});
