@@ -105,3 +105,29 @@ resetBtn.addEventListener("click", onResetClick);
 eraser.addEventListener("click", onEraserClick);
 saveButton.addEventListener("click", onSaveClick);
 imgSelect.forEach((img) => img.addEventListener("click", onImgClick));
+
+// 모바일
+
+// 터치 시작
+canvas.addEventListener("touchstart", (event) => {
+    event.preventDefault(); // 기본 스크롤 동작 방지
+    isPainting = true;
+    const touch = event.touches[0];
+    ctx.moveTo(touch.clientX, touch.clientY);
+});
+
+// 터치 이동
+canvas.addEventListener("touchmove", (event) => {
+    event.preventDefault(); // 기본 스크롤 동작 방지
+    if (!isPainting) return;
+    const touch = event.touches[0];
+    ctx.lineTo(touch.clientX, touch.clientY);
+    ctx.stroke();
+});
+
+// 터치 종료
+document.addEventListener("touchend", () => {
+    isPainting = false;
+    ctx.beginPath();
+});
+
